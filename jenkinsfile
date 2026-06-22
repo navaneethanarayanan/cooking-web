@@ -1,41 +1,32 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven3'
-        jdk 'JDK17'
-    }
-
     stages {
 
-        stage('Compile') {
+        stage('Checkout') {
             steps {
-                echo 'Compiling source code...'
-                sh 'mvn clean compile'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                echo 'Running unit tests...'
-                sh 'mvn test'
+                git 'https://github.com/YOUR_USERNAME/cooking-web.git'
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building application package...'
-                sh 'mvn package'
+                echo 'Building Cooking Website'
             }
         }
-    }
 
-    post {
-        success {
-            echo 'Pipeline completed successfully!'
+        stage('Test') {
+            steps {
+                sh 'test -f index.html'
+                sh 'test -f style.css'
+                sh 'test -f script.js'
+            }
         }
-        failure {
-            echo 'Pipeline failed!'
+
+        stage('Archive') {
+            steps {
+                archiveArtifacts artifacts: '**/*', fingerprint: true
+            }
         }
     }
 }
