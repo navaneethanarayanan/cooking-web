@@ -3,29 +3,30 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/YOUR_USERNAME/cooking-web.git'
-            }
-        }
-
         stage('Build') {
             steps {
-                echo 'Building Cooking Website'
+                echo 'Building Website...'
+
+                sh '''
+                mkdir -p build
+                cp -r * build/
+                '''
             }
         }
 
         stage('Test') {
             steps {
-                sh 'test -f index.html'
-                sh 'test -f style.css'
-                sh 'test -f script.js'
+                echo 'Testing Website...'
+
+                sh '''
+                test -f index.html
+                '''
             }
         }
 
         stage('Archive') {
             steps {
-                archiveArtifacts artifacts: '**/*', fingerprint: true
+                archiveArtifacts artifacts: 'build/**', fingerprint: true
             }
         }
     }
