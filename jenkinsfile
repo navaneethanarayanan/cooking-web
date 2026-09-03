@@ -8,8 +8,9 @@ pipeline {
                 echo 'Building Website...'
 
                 sh '''
-                mkdir -p build
-                cp -r * build/
+                    rm -rf build
+                    mkdir -p build
+                    cp hello.html helo.js style.css build/
                 '''
             }
         }
@@ -19,7 +20,7 @@ pipeline {
                 echo 'Testing Website...'
 
                 sh '''
-                test -f index.html
+                    test -f hello.html
                 '''
             }
         }
